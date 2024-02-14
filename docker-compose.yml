@@ -1,0 +1,33 @@
+version: '3.8'
+
+networks:
+  mynetwork:
+
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - mynetwork
+
+  fastapi:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    networks:
+      - mynetwork
+    volumes:
+      - fastapi_data:/path/to/your/fastapi/data
+
+volumes:
+  postgres_data:
+  fastapi_data:
